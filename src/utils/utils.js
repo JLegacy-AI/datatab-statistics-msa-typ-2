@@ -163,68 +163,22 @@ export function calculateTwoWayANOVA(data, factorA, factorB, measured) {
   // Calculate the degrees of freedom for Factor B (DF_B)
   const DF_B = uniqueLevelsB.length - 1;
 
-  // Calculate the degrees of freedom for the interaction (DF_interaction)
-  const DF_interaction = DF_A * DF_B;
-
   // Calculate the degrees of freedom for error (DF_error)
-  const DF_error = N - uniqueLevelsA.length - uniqueLevelsB.length + 1;
+  const DF_error = DF_total - DF_A - DF_B;
 
-  const SS_A = uniqueLevelsA.reduce((sum, levelA) => {
-    const groupValues = measured.filter(
-      (value, index) => factorA[index] === levelA
-    );
-
-    const groupMean =
-      groupValues.reduce((groupSum, groupValue) => groupSum + groupValue, 0) /
-      groupValues.length;
-
-    return (
-      sum +
-      groupValues.reduce(
-        (groupSum, groupValue) =>
-          groupSum + Math.pow(groupValue - groupMean, 2),
-        0
-      ) *
-        groupValues.length
-    );
-  }, 0);
+  const SS_A = calculateSumOfSquares(factorA, measured);
 
   // Calculate the sum of squares for Factor B (SS_B)
-  const SS_B = uniqueLevelsB.reduce((sum, levelB) => {
-    const groupValues = measured.filter(
-      (value, index) => factorB[index] === levelB
-    );
-    const groupMean =
-      groupValues.reduce((groupSum, groupValue) => groupSum + groupValue, 0) /
-      groupValues.length;
-
-    return (
-      sum +
-      groupValues.reduce(
-        (groupSum, groupValue) =>
-          groupSum + Math.pow(groupValue - groupMean, 2),
-        0
-      )
-    );
-  }, 0);
-
-  // Calculate the sum of squares for the interaction (SS_interaction)
-  const SS_interaction = SST - SS_A - SS_B;
+  const SS_B = calculateSumOfSquares(factorB, measured);
 
   // Calculate the sum of squares for error (SS_error)
-  const SS_error = SST - SS_A - SS_B - SS_interaction;
-
-  // Calculate the Sum of Squares Total (SS_Total)
-  const SS_Total = SST;
+  const SS_error = SST - SS_A - SS_B;
 
   // Calculate the mean square for Factor A (MS_A)
   const MS_A = SS_A / DF_A;
 
   // Calculate the mean square for Factor B (MS_B)
   const MS_B = SS_B / DF_B;
-
-  // Calculate the mean square for the interaction (MS_interaction)
-  const MS_interaction = SS_interaction / DF_interaction;
 
   // Calculate the mean square for error (MS_error)
   const MS_error = SS_error / DF_error;
@@ -235,40 +189,28 @@ export function calculateTwoWayANOVA(data, factorA, factorB, measured) {
   // Calculate the F-statistic for Factor B (F_B)
   const F_B = MS_B / MS_error;
 
-  // Calculate the F-statistic for the interaction (F_interaction)
-  const F_interaction = MS_interaction / MS_error;
-
   // Calculate the p-value for Factor A (P_A)
   const P_A = 1 - jStat.centralF.cdf(F_A, DF_A, DF_error);
 
   // Calculate the p-value for Factor B (P_B)
   const P_B = 1 - jStat.centralF.cdf(F_B, DF_B, DF_error);
 
-  // Calculate the p-value for the interaction (P_interaction)
-  const P_interaction =
-    1 - jStat.centralF.cdf(F_interaction, DF_interaction, DF_error);
-
   return {
     DF_total,
     DF_A,
     DF_B,
-    DF_interaction,
     DF_error,
     SS_A,
     SS_B,
-    SS_interaction,
     SS_error,
-    SS_Total, // Added SS_Total
+    SS_Total: SST, // Include SS_Total
     MS_A,
     MS_B,
-    MS_interaction,
     MS_error,
     F_A,
     F_B,
-    F_interaction,
     P_A,
     P_B,
-    P_interaction,
   };
 }
 
@@ -281,8 +223,7 @@ export function calculateGageRR(
   const n = measurementData.length;
 
   // Calculate overall mean
-  const overallMean =
-    measurementData.reduce((sum, value) => sum + value, 0) / n;
+  const overallMean = jStat.mean(measurementData);
 
   // Calculate total variation
   const totalVariation = measurementData.reduce(
@@ -434,3 +375,26 @@ export function calculateGageRR(
 
   return results;
 }
+
+const calculateSumOfSquares = (factorA, measurement) => {
+  const uniqueLevels = [...new Set(factorA)];
+  console.log(uniqueLevels);
+  const measurementGroups = uniqueLevels.map((level, index) => {
+    const group = measurement.filter((value, index) => {
+      return factorA[index] === level;
+    });
+    return group;
+  });
+  console.log(measurementGroups);
+
+  const measuredGroupMean = measurementGroups.map((group, index) => {
+    return jStat.mean(group);
+  });
+  const overallMean = jStat.mean(measuredGroupMean);
+  console.log(measuredGroupMean);
+  const SS = measuredGroupMean.map((value, i) => {
+    return measurementGroups[i].length * Math.pow(value - overallMean, 2);
+  });
+
+  return jStat.sum(SS);
+};

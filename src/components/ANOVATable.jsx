@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  ANOVATwoWayWithoutInteraction,
   calculateGageRR,
   calculateTwoWayANOVA,
   convertToArray,
@@ -17,6 +18,12 @@ const ANOVATable = ({ data, selectedColumns }) => {
   );
 
   const result = calculateTwoWayANOVA(data, operator, part, measured);
+  //
+  // Extras
+
+  // ANOVATwoWayWithoutInteraction(operator, measured);
+
+  //
 
   return (
     <div>

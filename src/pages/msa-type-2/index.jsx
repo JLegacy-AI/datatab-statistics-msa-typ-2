@@ -8,6 +8,8 @@ import DataTable from "../../components/Handsontable";
 import { readFile } from "../../utils/utils";
 import ANOVATable from "../../components/ANOVATable";
 import VarianceComponentTable from "../../components/VarianceComponentTable";
+import ComponentVariationChart from "../../components/charts/ComponentVariationChart";
+import MeasurementHistoryChart from "../../components/charts/MeasurementHistoryChart";
 
 const MSAType2 = () => {
   const [data, setData] = useState([]);
@@ -108,6 +110,9 @@ const MSAType2 = () => {
       <>
         {canCalculate(selectedColumns) ? (
           <>
+            <MeasurementHistoryChart />
+            <hr className="border my-10" />
+            <ComponentVariationChart />
             <hr className="border my-10" />
             <VarianceComponentTable
               data={data}
