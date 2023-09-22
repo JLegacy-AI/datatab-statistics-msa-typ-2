@@ -231,8 +231,6 @@ export function calculateGageRR(
     0
   );
 
-  console.log("Total Variation: ", totalVariation);
-
   // Initialize result object
   const results = {};
 
@@ -402,13 +400,8 @@ const calculateSumOfSquares = (factorA, measurement) => {
 };
 
 export const calculatePartToPartVariation = (factorA, measured) => {
-  // console.log(factorA);
-  // console.log(measured);
-
   const grandMean = calculateGrandMean(measured);
   const uniqueLevels = [...new Set(factorA)];
-  // console.log(grandMean);
-  // console.log(uniqueLevels);
   const measurementGroups = uniqueLevels.map((level, index) => {
     const group = measured.filter((value, index) => {
       return factorA[index] === level;
@@ -427,10 +420,6 @@ export const calculatePartToPartVariation = (factorA, measured) => {
 };
 
 function calculateGrandMean(measurements) {
-  if (measurements.length === 0) {
-    throw new Error("The measurements array is empty.");
-  }
-
   const sum = measurements.reduce(
     (accumulator, measurement) => accumulator + measurement,
     0
@@ -440,11 +429,217 @@ function calculateGrandMean(measurements) {
   return grandMean;
 }
 
-export const varianceComponent = (part, operator, measurement, tolerance) => {
-  const MS_OPERATOR = 0;
-  const MS_OPERATOR_PART = 0;
-  const MS_PART = 0;
-  const a = 0;
-  const b = 0;
-  const n = 0;
+export const varianceComponent = (operator, part, measurement, tolerance) => {
+  let result = {
+    Repeatability: {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    Reproducibility: {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    Operator: {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    "Part to Part": {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    "Total Variation": {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    "Total Gage R&R": {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+  };
+
+  // VarComp Measurement
+  result["Repeatability"]["VarComp"] = calculateRepeatability(
+    operator,
+    part,
+    measurement
+  );
+  result["Operator"]["VarComp"] = calculatePartToPartVariation(
+    operator,
+    measurement
+  );
+
+  result["Reproducibility"]["VarComp"] =
+    result["Operator"]["VarComp"] + partToOperator(part, operator, measurement);
+  result["Total Gage R&R"]["VarComp"] =
+    result["Reproducibility"]["VarComp"] + result["Repeatability"]["VarComp"];
+  result["Part to Part"]["VarComp"] = calculatePartToPartVariation(
+    part,
+    measurement
+  );
+  result["Total Variation"]["VarComp"] =
+    result["Part to Part"]["VarComp"] + result["Total Gage R&R"]["VarComp"];
+
+  // % Variance Component
+  result["Total Gage R&R"]["% Contribution (of VarComp)"] =
+    (result["Total Gage R&R"]["VarComp"] /
+      result["Total Variation"]["VarComp"]) *
+    100;
+  result["Operator"]["% Contribution (of VarComp)"] =
+    (result["Operator"]["VarComp"] / result["Total Variation"]["VarComp"]) *
+    100;
+  result["Repeatability"]["% Contribution (of VarComp)"] =
+    (result["Repeatability"]["VarComp"] /
+      result["Total Variation"]["VarComp"]) *
+    100;
+  result["Reproducibility"]["% Contribution (of VarComp)"] =
+    (result["Reproducibility"]["VarComp"] /
+      result["Total Variation"]["VarComp"]) *
+    100;
+  result["Part to Part"]["% Contribution (of VarComp)"] =
+    (result["Part to Part"]["VarComp"] / result["Total Variation"]["VarComp"]) *
+    100;
+  result["Total Variation"]["% Contribution (of VarComp)"] =
+    (result["Total Variation"]["VarComp"] /
+      result["Total Variation"]["VarComp"]) *
+    100;
+
+  //standard Deviation
+  result["Total Gage R&R"]["stdDev"] = Math.sqrt(
+    result["Total Gage R&R"]["VarComp"]
+  );
+  result["Operator"]["stdDev"] = Math.sqrt(result["Operator"]["VarComp"]);
+  result["Repeatability"]["stdDev"] = Math.sqrt(
+    result["Total Gage R&R"]["VarComp"]
+  );
+  result["Reproducibility"]["stdDev"] = Math.sqrt(
+    result["Reproducibility"]["VarComp"]
+  );
+  result["Total Variation"]["stdDev"] = Math.sqrt(
+    result["Total Variation"]["VarComp"]
+  );
+  result["Part to Part"]["stdDev"] = Math.sqrt(
+    result["Total Gage R&R"]["VarComp"]
+  );
+
+  // Study Variance
+  result["Total Gage R&R"]["Study Variance (6xSD)"] =
+    6 * result["Total Gage R&R"]["stdDev"];
+  result["Operator"]["Study Variance (6xSD)"] =
+    6 * result["Operator"]["stdDev"];
+  result["Repeatability"]["Study Variance (6xSD)"] =
+    6 * result["Repeatability"]["stdDev"];
+  result["Reproducibility"]["Study Variance (6xSD)"] =
+    6 * result["Reproducibility"]["stdDev"];
+  result["Part to Part"]["Study Variance (6xSD)"] =
+    6 * result["Part to Part"]["stdDev"];
+  result["Total Variation"]["Study Variance (6xSD)"] =
+    6 * result["Total Variation"]["stdDev"];
+
+  // % Study Variance
+  result["Total Gage R&R"]["% Study Variance (%SV)"] =
+    (result["Total Gage R&R"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Operator"]["% Study Variance (%SV)"] =
+    (result["Operator"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Repeatability"]["% Study Variance (%SV)"] =
+    (result["Total Gage R&R"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Reproducibility"]["% Study Variance (%SV)"] =
+    (result["Reproducibility"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Part to Part"]["% Study Variance (%SV)"] =
+    (result["Part to Part"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Total Variation"]["% Study Variance (%SV)"] =
+    (result["Total Variation"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+
+  // % Tolerance
+  result["Operator"]["% Tolerance (SV/Tol)"] =
+    result["Operator"]["Study Variance (6xSD)"] / (tolerance / 100);
+  result["Repeatability"]["% Tolerance (SV/Tol)"] =
+    result["Repeatability"]["Study Variance (6xSD)"] / (tolerance / 100);
+  result["Reproducibility"]["% Tolerance (SV/Tol)"] =
+    result["Reproducibility"]["Study Variance (6xSD)"] / (tolerance / 100);
+  result["Part to Part"]["% Tolerance (SV/Tol)"] =
+    result["Part to Part"]["Study Variance (6xSD)"] / (tolerance / 100);
+  result["Total Gage R&R"]["% Tolerance (SV/Tol)"] =
+    result["Total Gage R&R"]["Study Variance (6xSD)"] / (tolerance / 100);
+  result["Total Variation"]["% Tolerance (SV/Tol)"] =
+    result["Total Variation"]["Study Variance (6xSD)"] / (tolerance / 100);
+
+  return result;
+};
+
+const calculateRepeatability = (operator, part, measurement) => {
+  const N = measurement.length;
+
+  const grandMean = measurement.reduce((sum, value) => sum + value, 0) / N;
+  const SST = measurement.reduce(
+    (sum, value) => sum + Math.pow(value - grandMean, 2),
+    0
+  );
+
+  const SS_A = calculateSumOfSquares(operator, measurement);
+
+  const SS_B = calculateSumOfSquares(part, measurement);
+
+  return SST - SS_A - SS_B;
+};
+
+const partToOperator = (operator, part, measurement) => {
+  const uniquenessPart = [...new Set(part)];
+  const uniquenessOperator = [...new Set(operator)];
+
+  const grandMean = calculateGrandMean(measurement);
+  const measurementsGroups = uniquenessPart.map((levelA, ind) => {
+    return uniquenessOperator.map((levelB, index) => {
+      return measurement.filter(
+        (value, i) => part[i] === levelA && operator[i] === levelB
+      );
+    });
+  });
+
+  return (
+    jStat.mean(
+      measurementsGroups.map((value, ind) => {
+        return jStat.mean(
+          value.map((va) => {
+            return jStat.mean(va);
+          })
+        );
+      })
+    ) / measurementsGroups.length
+  );
 };

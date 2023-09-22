@@ -14,11 +14,6 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
     selectedColumns["measuredValuesColumn"]
   );
 
-  const selectedPairsPartOperator = operator.map((value, index) => [
-    part[index],
-    operator[index],
-  ]);
-
   const uniquenessPart = [...new Set(part)];
   const uniquenessOperator = [...new Set(operator)];
 

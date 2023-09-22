@@ -1,5 +1,9 @@
 import React, { useCallback } from "react";
-import { calculateGageRR, convertToArray } from "../utils/utils";
+import {
+  calculateGageRR,
+  convertToArray,
+  varianceComponent,
+} from "../utils/utils";
 
 const VarianceComponentTable = ({ data, selectedColumns }) => {
   const operator = convertToArray(
@@ -16,7 +20,7 @@ const VarianceComponentTable = ({ data, selectedColumns }) => {
     return typeof number === "number" ? number.toFixed(5) : number;
   }, []);
 
-  const result = calculateGageRR(operator, part, measured, 20);
+  const result = varianceComponent(operator, part, measured, 20);
 
   return (
     <div>

@@ -4,6 +4,7 @@ import {
   ANOVATwoWayWithoutInteraction,
   calculateGageRR,
   convertToArray,
+  varianceComponent,
 } from "../../utils/utils";
 
 const ComponentVariationChart = ({ data, selectedColumns }) => {
@@ -32,7 +33,7 @@ const ComponentVariationChart = ({ data, selectedColumns }) => {
     };
   }, []);
 
-  const result = calculateGageRR(operator, part, measured);
+  const result = varianceComponent(operator, part, measured, 20);
 
   const data2 = [
     {
