@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 import SAMPLE_DATA from "../../assets/MSA Typ 2_example data.xlsx";
-import Setting from "../../components/Setting";
 import { canCalculate, handleClearTable, initColumns } from "../../utils/utils";
-import Swal from "sweetalert2";
-import DataTable from "../../components/Handsontable";
 import { readFile } from "../../utils/utils";
 import ANOVATable from "../../components/ANOVATable";
 import VarianceComponentTable from "../../components/VarianceComponentTable";
 import ComponentVariationChart from "../../components/charts/ComponentVariationChart";
 import MeasurementHistoryChart from "../../components/charts/MeasurementHistoryChart";
+import { lazy } from "react";
+import { Suspense } from "react";
+
+const Setting = lazy(() => import("../../components/Setting"));
+const DataTable = lazy(() => import("../../components/Handsontable"));
 
 const MSAType2 = () => {
   const [data, setData] = useState([]);
@@ -94,18 +96,34 @@ const MSAType2 = () => {
           </p>
         ) : (
           <>
-            <DataTable dataTable={data} setDataTable={setData} />
+            <Suspense
+              fallback={
+                <p className="w-full min-h-[500px] flex justify-center items-center">
+                  Loading Table...
+                </p>
+              }
+            >
+              <DataTable dataTable={data} setDataTable={setData} />
+            </Suspense>
           </>
         )}
       </div>
 
       <>
         <hr className="my-10 border" />
-        <Setting
-          columnInformation={columnInformation}
-          selectedColumns={selectedColumns}
-          setSelectedColumns={setSelectedColumns}
-        />
+        <Suspense
+          fallback={
+            <p className="w-full min-h-[300px] flex justify-center items-center">
+              Loading Setting...
+            </p>
+          }
+        >
+          <Setting
+            columnInformation={columnInformation}
+            selectedColumns={selectedColumns}
+            setSelectedColumns={setSelectedColumns}
+          />
+        </Suspense>
       </>
       <>
         {canCalculate(selectedColumns) ? (
@@ -128,7 +146,7 @@ const MSAType2 = () => {
             <ANOVATable data={data} selectedColumns={selectedColumns} />
           </>
         ) : (
-          <>Cannot Calculate</>
+          <></>
         )}
       </>
       <hr className="border my-10" />

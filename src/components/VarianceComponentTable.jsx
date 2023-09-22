@@ -1,9 +1,5 @@
 import React, { useCallback } from "react";
-import {
-  calculateGageRR,
-  convertToArray,
-  varianceComponent,
-} from "../utils/utils";
+import { convertToArray, varianceComponent } from "../utils/utils";
 
 const VarianceComponentTable = ({ data, selectedColumns }) => {
   const operator = convertToArray(

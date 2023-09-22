@@ -10,21 +10,12 @@
   box-sizing: border-box;
 }
 
-table {
-  width: 100%;
+html {
+  font-size: 90%;
 }
 
-/* tr {
-  display: flex;
-  justify-content: start;
+@media (max-width: 768px) {
+  html {
+    font-size: 62.5%;
+  }
 }
-
-th {
-  display: flex;
-  justify-content: start;
-}
-
-td,
-th {
-  flex: 1;
-} */

@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Plot from "react-plotly.js";
-import {
-  ANOVATwoWayWithoutInteraction,
-  calculateGageRR,
-  convertToArray,
-  varianceComponent,
-} from "../../utils/utils";
+import { convertToArray, varianceComponent } from "../../utils/utils";
 
 const ComponentVariationChart = ({ data, selectedColumns }) => {
   const operator = convertToArray(
