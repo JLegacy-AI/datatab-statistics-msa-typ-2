@@ -17,7 +17,7 @@ const VarianceComponentTable = ({ data, selectedColumns }) => {
   }, []);
 
   const result = calculateGageRR(operator, part, measured, 20);
-  console.log(result);
+
   return (
     <div>
       <div className="grid grid-cols-1 gap-4">

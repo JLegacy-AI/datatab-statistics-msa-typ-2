@@ -110,9 +110,15 @@ const MSAType2 = () => {
       <>
         {canCalculate(selectedColumns) ? (
           <>
-            <MeasurementHistoryChart />
+            <MeasurementHistoryChart
+              data={data}
+              selectedColumns={selectedColumns}
+            />
             <hr className="border my-10" />
-            <ComponentVariationChart />
+            <ComponentVariationChart
+              data={data}
+              selectedColumns={selectedColumns}
+            />
             <hr className="border my-10" />
             <VarianceComponentTable
               data={data}

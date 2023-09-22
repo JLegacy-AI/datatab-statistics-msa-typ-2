@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Plot from "react-plotly.js";
-import { ANOVATwoWayWithoutInteraction } from "../../utils/utils";
+import {
+  ANOVATwoWayWithoutInteraction,
+  calculateGageRR,
+  convertToArray,
+} from "../../utils/utils";
 
-const ComponentVariationChart = () => {
+const ComponentVariationChart = ({ data, selectedColumns }) => {
+  const operator = convertToArray(
+    data,
+    selectedColumns["operatorValuesColumn"]
+  );
+  const part = convertToArray(data, selectedColumns["partsColumn"]);
+  const measured = convertToArray(
+    data,
+    selectedColumns["measuredValuesColumn"]
+  );
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   // Update the window width when the window is resized
@@ -18,23 +32,46 @@ const ComponentVariationChart = () => {
     };
   }, []);
 
-  const data = [
+  const result = calculateGageRR(operator, part, measured);
+
+  const data2 = [
     {
-      x: ["Category A", "Category B", "Category C"],
-      y: [3, 4, 2],
-      name: "Group 1",
+      x: ["Gage R&R", "Repeat", "Reprod", "Part to Part"],
+      y: [
+        result["Total Gage R&R"]["% Contribution (of VarComp)"],
+        result["Repeatability"]["% Contribution (of VarComp)"],
+        result["Reproducibility"]["% Contribution (of VarComp)"],
+        result["Part to Part"]["% Contribution (of VarComp)"],
+      ],
+      name: "% Contribution",
       type: "bar",
     },
     {
-      x: ["Category A", "Category B", "Category C"],
-      y: [5, 2, 3],
-      name: "Group 2",
+      x: ["Gage R&R", "Repeat", "Reprod", "Part to Part"],
+      y: [
+        result["Total Gage R&R"]["% Study Variance (%SV)"],
+        result["Repeatability"]["% Study Variance (%SV)"],
+        result["Reproducibility"]["% Study Variance (%SV)"],
+        result["Part to Part"]["% Study Variance (%SV)"],
+      ],
+      name: "% Study Var",
+      type: "bar",
+    },
+    {
+      x: ["Gage R&R", "Repeat", "Reprod", "Part to Part"],
+      y: [
+        result["Total Gage R&R"]["% Tolerance (SV/Tol)"],
+        result["Repeatability"]["% Tolerance (SV/Tol)"],
+        result["Reproducibility"]["% Tolerance (SV/Tol)"],
+        result["Part to Part"]["% Tolerance (SV/Tol)"],
+      ],
+      name: "% Tolearnce",
       type: "bar",
     },
   ];
 
   const layout = {
-    title: "Grouped Bar Chart",
+    title: "Component of Variance",
     barmode: "group",
   };
 
@@ -42,9 +79,9 @@ const ComponentVariationChart = () => {
   const chartWidth = windowWidth > 768 ? 800 : windowWidth - 20;
 
   return (
-    <div>
+    <div className="flex justify-center items-center flex-col">
       <Plot
-        data={data}
+        data={data2}
         layout={{
           ...layout,
           width: chartWidth, // Set the chart width dynamically

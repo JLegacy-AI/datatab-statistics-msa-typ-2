@@ -231,6 +231,8 @@ export function calculateGageRR(
     0
   );
 
+  console.log("Total Variation: ", totalVariation);
+
   // Initialize result object
   const results = {};
 
@@ -261,7 +263,7 @@ export function calculateGageRR(
     operatorVariancesArray.length;
 
   results.Operator = {
-    VarComp: averageOperatorVariance,
+    VarComp: calculatePartToPartVariation(operatorData, measurementData),
   };
 
   // Calculate reproducibility variance
@@ -285,13 +287,8 @@ export function calculateGageRR(
   }
 
   results["Part to Part"] = {
-    VarComp:
-      Object.values(partVariances).reduce(
-        (sum, variance) => sum + variance,
-        0
-      ) / n,
+    VarComp: calculatePartToPartVariation(partData, measurementData),
   };
-
   // Calculate repeatability variance
   results.Repeatability = {
     VarComp: results.Operator.VarComp - results["Part to Part"].VarComp,
@@ -304,7 +301,7 @@ export function calculateGageRR(
 
   // Calculate reproducibility variance
   results.Reproducibility = {
-    VarComp: totalVariation - results.Operator.VarComp,
+    VarComp: (totalVariation - results.Operator.VarComp) / n,
   };
 
   // Calculate percentages
@@ -339,17 +336,25 @@ export function calculateGageRR(
   results.Reproducibility["Study Variance (6xSD)"] =
     6 * results.Reproducibility.stdDev;
 
+  const total_variation =
+    results["Operator"]["Study Variance (6xSD)"] +
+    results["Part to Part"]["Study Variance (6xSD)"] +
+    results["Total Gage R&R"]["Study Variance (6xSD)"] +
+    results["Reproducibility"]["Study Variance (6xSD)"] +
+    results["Repeatability"]["Study Variance (6xSD)"];
+
   // Calculate percentage study variance
   results.Operator["% Study Variance (%SV)"] =
-    (results.Operator["Study Variance (6xSD)"] / totalVariation) * 100;
+    (results.Operator["Study Variance (6xSD)"] / total_variation) * 100;
   results.Repeatability["% Study Variance (%SV)"] =
-    (results.Repeatability["Study Variance (6xSD)"] / totalVariation) * 100;
+    (results.Repeatability["Study Variance (6xSD)"] / total_variation) * 100;
   results["Part to Part"]["% Study Variance (%SV)"] =
-    (results["Part to Part"]["Study Variance (6xSD)"] / totalVariation) * 100;
+    (results["Part to Part"]["Study Variance (6xSD)"] / total_variation) * 100;
   results["Total Gage R&R"]["% Study Variance (%SV)"] =
-    (results["Total Gage R&R"]["Study Variance (6xSD)"] / totalVariation) * 100;
+    (results["Total Gage R&R"]["Study Variance (6xSD)"] / total_variation) *
+    100;
   results.Reproducibility["% Study Variance (%SV)"] =
-    (results.Reproducibility["Study Variance (6xSD)"] / totalVariation) * 100;
+    (results.Reproducibility["Study Variance (6xSD)"] / total_variation) * 100;
 
   // Calculate percentage tolerance (SV/Tol)
   results.Operator["% Tolerance (SV/Tol)"] =
@@ -378,23 +383,68 @@ export function calculateGageRR(
 
 const calculateSumOfSquares = (factorA, measurement) => {
   const uniqueLevels = [...new Set(factorA)];
-  console.log(uniqueLevels);
   const measurementGroups = uniqueLevels.map((level, index) => {
     const group = measurement.filter((value, index) => {
       return factorA[index] === level;
     });
     return group;
   });
-  console.log(measurementGroups);
 
   const measuredGroupMean = measurementGroups.map((group, index) => {
     return jStat.mean(group);
   });
   const overallMean = jStat.mean(measuredGroupMean);
-  console.log(measuredGroupMean);
   const SS = measuredGroupMean.map((value, i) => {
     return measurementGroups[i].length * Math.pow(value - overallMean, 2);
   });
 
   return jStat.sum(SS);
+};
+
+export const calculatePartToPartVariation = (factorA, measured) => {
+  // console.log(factorA);
+  // console.log(measured);
+
+  const grandMean = calculateGrandMean(measured);
+  const uniqueLevels = [...new Set(factorA)];
+  // console.log(grandMean);
+  // console.log(uniqueLevels);
+  const measurementGroups = uniqueLevels.map((level, index) => {
+    const group = measured.filter((value, index) => {
+      return factorA[index] === level;
+    });
+    return group;
+  });
+
+  const measuredGroupMean = measurementGroups.map((group, index) => {
+    return jStat.mean(group);
+  });
+  const VV = measuredGroupMean.map((value, i) => {
+    return measurementGroups[i].length * Math.pow(value - grandMean, 2);
+  });
+
+  return jStat.mean(VV) / (measurementGroups.length - 1);
+};
+
+function calculateGrandMean(measurements) {
+  if (measurements.length === 0) {
+    throw new Error("The measurements array is empty.");
+  }
+
+  const sum = measurements.reduce(
+    (accumulator, measurement) => accumulator + measurement,
+    0
+  );
+  const grandMean = sum / measurements.length;
+
+  return grandMean;
+}
+
+export const varianceComponent = (part, operator, measurement, tolerance) => {
+  const MS_OPERATOR = 0;
+  const MS_OPERATOR_PART = 0;
+  const MS_PART = 0;
+  const a = 0;
+  const b = 0;
+  const n = 0;
 };
