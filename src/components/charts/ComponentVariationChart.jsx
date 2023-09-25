@@ -61,7 +61,7 @@ const ComponentVariationChart = ({ data, selectedColumns }) => {
         result["Reproducibility"]["% Tolerance (SV/Tol)"],
         result["Part to Part"]["% Tolerance (SV/Tol)"],
       ],
-      name: "% Tolearnce",
+      name: "% Tolerance",
       type: "bar",
     },
   ];
