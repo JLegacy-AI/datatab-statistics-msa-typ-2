@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://qm-datalab.de/msatyp2",
   "dependencies": {
-    "@babel/plugin-prosposal-private-property-in-object": "^7.21.11",
     "@handsontable/react": "^13.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
