@@ -81,7 +81,10 @@ const ComponentVariationChart = ({ data, selectedColumns }) => {
         layout={{
           ...layout,
           width: chartWidth, // Set the chart width dynamically
-          height: 400, // Set a fixed chart height or adjust as needed
+          height: chartWidth*0.5  < 300 ? 300 : chartWidth*0.5, // Set a fixed chart height or adjust as needed
+        }}
+        config={{
+          displayModeBar: false,
         }}
       />
     </div>

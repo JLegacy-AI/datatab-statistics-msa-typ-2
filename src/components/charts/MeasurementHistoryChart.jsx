@@ -138,7 +138,7 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
             title: data[0][selectedColumns["measuredValuesColumn"]],
           },
           width: chartWidth,
-          height: 500,
+          height: chartWidth*0.714 < 300 ? 300 : chartWidth*0.714 ,
         }}
         config={{
           displayModeBar: false,

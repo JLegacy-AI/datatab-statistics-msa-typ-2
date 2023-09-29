@@ -8,6 +8,7 @@
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
+  text-align: justify;
 }
 
 table {
@@ -15,7 +16,19 @@ table {
 }
 
 html {
-  font-size: 90%;
+  font-size: 100%;
+}
+
+@media (max-width: 900px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 800px) {
+  html {
+    font-size: 80%;
+  }
 }
 
 @media (max-width: 768px) {

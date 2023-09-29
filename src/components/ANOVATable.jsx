@@ -18,21 +18,15 @@ const ANOVATable = ({ data, selectedColumns }) => {
   );
 
   const result = calculateTwoWayANOVA(data, operator, part, measured);
-  //
-  // Extras
-
-  // ANOVATwoWayWithoutInteraction(operator, measured);
-
-  //
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+      <div className="grid grid-cols-1 gap-4">
           <h3 className="text-xl font-semibold bg-black text-white  text-center">
             Two Factor ANOVA without Interaction
           </h3>
-          <table>
+          <div className="w-full overflow-x-scroll">
+          <table className="min-w-[700px]">
             <thead className="border-b-2 border-b-gray-300">
               <tr className="w-full py-2.5 ">
                 <td>Source</td>
@@ -118,7 +112,7 @@ const ANOVATable = ({ data, selectedColumns }) => {
               </tr>
             </tbody>
           </table>
-        </div>
+          </div>
       </div>
     </div>
   );
