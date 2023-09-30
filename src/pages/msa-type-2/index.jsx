@@ -5,14 +5,20 @@ import { canCalculate, handleClearTable, initColumns } from "../../utils/utils";
 import { readFile } from "../../utils/utils";
 import { lazy } from "react";
 import { Suspense } from "react";
-import LOADING from "../../assets/loading.gif"
+import LOADING from "../../assets/loading.gif";
 
 const Setting = lazy(() => import("../../components/Setting"));
 const DataTable = lazy(() => import("../../components/Handsontable"));
-const ANOVATable = lazy(() => import( "../../components/ANOVATable"))
-const VarianceComponentTable = lazy(() => import( "../../components/VarianceComponentTable"));
-const ComponentVariationChart = lazy(() => import("../../components/charts/ComponentVariationChart"))
-const MeasurementHistoryChart = lazy(() => import("../../components/charts/MeasurementHistoryChart"))
+const ANOVATable = lazy(() => import("../../components/ANOVATable"));
+const VarianceComponentTable = lazy(() =>
+  import("../../components/VarianceComponentTable")
+);
+const ComponentVariationChart = lazy(() =>
+  import("../../components/charts/ComponentVariationChart")
+);
+const MeasurementHistoryChart = lazy(() =>
+  import("../../components/charts/MeasurementHistoryChart")
+);
 
 const MSAType2 = () => {
   const [data, setData] = useState([]);
@@ -56,28 +62,34 @@ const MSAType2 = () => {
     }
   };
 
-
   /**
    * Use Callback
    */
 
   const canPreSelect = useCallback(() => {
     return Object.values(columnInformation).every((value) => value.length > 0);
-  },[columnInformation])
+  }, [columnInformation]);
+
+  const isPartOperatorSame = useCallback(() => {
+    const partColumn = selectedColumns["partsColumn"];
+    const operatorColumn = selectedColumns["operatorValuesColumn"];
+    return partColumn !== operatorColumn;
+  }, [selectedColumns]);
 
   /**
    * Use Effects
    */
 
-  
-
   useEffect(() => {
-    if(canPreSelect()){
-      const newSelectedColumn = {}
-      newSelectedColumn["measuredValuesColumn"] = columnInformation["measuredValuesColumn"][0].number
-      newSelectedColumn["operatorValuesColumn"] = columnInformation["operatorValuesColumn"][0].number
-      newSelectedColumn["partsColumn"] = columnInformation["partsColumn"][1].number
-      setSelectedColumns(newSelectedColumn)
+    if (canPreSelect()) {
+      const newSelectedColumn = {};
+      newSelectedColumn["measuredValuesColumn"] =
+        columnInformation["measuredValuesColumn"][0].number;
+      newSelectedColumn["operatorValuesColumn"] =
+        columnInformation["operatorValuesColumn"][0].number;
+      newSelectedColumn["partsColumn"] =
+        columnInformation["partsColumn"][1].number;
+      setSelectedColumns(newSelectedColumn);
     }
   }, [columnInformation]);
 
@@ -91,13 +103,13 @@ const MSAType2 = () => {
 
   return (
     <div>
-      <h1 className="font-bold text-2xl mb-3">Data input</h1>
+      <h1 className="font-bold text-2xl mb-3">Dateninput</h1>
       <div className="flex gap-4">
         <button
           className="hover:text-green-600 transition-all duration-300"
           onClick={() => setData(handleClearTable)}
         >
-          Clear Table
+          Alle Daten löschen
         </button>
         <input
           className="hover:text-green-600 transition-all duration-300"
@@ -108,7 +120,7 @@ const MSAType2 = () => {
           className="underline hover:text-blue-600 transition-all duration-300"
           onClick={() => fetchData()}
         >
-          Load Example Data
+          Beispieldaten laden
         </button>
       </div>
       <div>
@@ -121,7 +133,12 @@ const MSAType2 = () => {
             <Suspense
               fallback={
                 <p className="w-full min-h-[500px] flex justify-center items-center">
-                  <img src={LOADING} alt="LOADING IMAGE" height="200" width="200" />
+                  <img
+                    src={LOADING}
+                    alt="LOADING IMAGE"
+                    height="200"
+                    width="200"
+                  />
                 </p>
               }
             >
@@ -136,7 +153,7 @@ const MSAType2 = () => {
         <Suspense
           fallback={
             <p className="w-full min-h-[300px] flex justify-center items-center">
-             <img src={LOADING} alt="LOADING IMAGE" height="200" width="200" />
+              <img src={LOADING} alt="LOADING IMAGE" height="200" width="200" />
             </p>
           }
         >
@@ -150,43 +167,77 @@ const MSAType2 = () => {
       <>
         {canCalculate(selectedColumns) ? (
           <>
-            <Suspense fallback={
-              <p className="w-100 h-[400px]">
-                <img src={LOADING} alt="LOADING IMAGE" height="200" width="200" />
-              </p>
-            }>
+            <Suspense
+              fallback={
+                <p className="w-100 h-[400px]">
+                  <img
+                    src={LOADING}
+                    alt="LOADING IMAGE"
+                    height="200"
+                    width="200"
+                  />
+                </p>
+              }
+            >
               <MeasurementHistoryChart
                 data={data}
                 selectedColumns={selectedColumns}
               />
             </Suspense>
-            <Suspense fallback={
-              <p className="w-100 h-[400px]">
-                <img src={LOADING} alt="LOADING IMAGE" height="200" width="200" />
-              </p>
-            }>
-              <hr className="border my-10" />
-              <ComponentVariationChart
-                data={data}
-                selectedColumns={selectedColumns}
-              />
+            <Suspense
+              fallback={
+                <p className="w-100 h-[400px]">
+                  <img
+                    src={LOADING}
+                    alt="LOADING IMAGE"
+                    height="200"
+                    width="200"
+                  />
+                </p>
+              }
+            >
+              {isPartOperatorSame() ? (
+                <>
+                  <hr className="border my-10" />
+                  <ComponentVariationChart
+                    data={data}
+                    selectedColumns={selectedColumns}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
             </Suspense>
-            <Suspense fallback={
-              <p className="w-100 h-[400px]">
-                <img src={LOADING} alt="LOADING IMAGE" height="200" width="200" />
-              </p>
-            }>
+            <Suspense
+              fallback={
+                <p className="w-100 h-[400px]">
+                  <img
+                    src={LOADING}
+                    alt="LOADING IMAGE"
+                    height="200"
+                    width="200"
+                  />
+                </p>
+              }
+            >
               <hr className="border my-10" />
               <VarianceComponentTable
                 data={data}
                 selectedColumns={selectedColumns}
               />
             </Suspense>
-            <Suspense fallback={
-              <p className="w-100 h-[400px]">
-                 <img src={LOADING} alt="LOADING IMAGE" height="200" width="200" />
-              </p>
-            }>
+            <Suspense
+              fallback={
+                <p className="w-100 h-[400px]">
+                  <img
+                    src={LOADING}
+                    alt="LOADING IMAGE"
+                    height="200"
+                    width="200"
+                  />
+                </p>
+              }
+            >
               <hr className="border my-10" />
               <ANOVATable data={data} selectedColumns={selectedColumns} />
             </Suspense>

@@ -34,7 +34,7 @@ const Setting = ({
 }) => {
   return (
     <div>
-      <h1 className="font-bold text-2xl">Settings</h1>
+      <h1 className="font-bold text-2xl">Einstellungen</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         <div className="flex flex-col items-start justify-center">
           <p className="py-5">Measured values:</p>
