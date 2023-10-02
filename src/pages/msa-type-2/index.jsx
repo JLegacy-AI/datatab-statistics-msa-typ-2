@@ -249,6 +249,8 @@ const MSAType2 = () => {
               <VarianceComponentTable
                 data={data}
                 selectedColumns={selectedColumns}
+                LSL={LSL}
+                USL={USL}
               />
             </Suspense>
           </>

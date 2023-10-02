@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { convertToArray, varianceComponent } from "../../utils/utils";
 
-const VarianceComponentTable = ({ data, selectedColumns }) => {
+const VarianceComponentTable = ({ data, selectedColumns, LSL, USL }) => {
   const operator = convertToArray(
     data,
     selectedColumns["operatorValuesColumn"]
@@ -16,7 +16,7 @@ const VarianceComponentTable = ({ data, selectedColumns }) => {
     return typeof number === "number" ? number.toFixed(5) : number;
   }, []);
 
-  const result = varianceComponent(operator, part, measured, 20);
+  const result = varianceComponent(operator, part, measured, USL - LSL);
 
   return (
     <div>
