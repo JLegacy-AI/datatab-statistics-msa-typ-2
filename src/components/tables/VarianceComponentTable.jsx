@@ -24,8 +24,8 @@ const VarianceComponentTable = ({ data, selectedColumns }) => {
         <h3 className="text-xl font-semibold bg-black text-white  text-center">
           Variance Components
         </h3>
-        <div className="grid grid-cols-1">
-          <table className="min-w-[400px]">
+        <div className="grid grid-cols-1 gap-4">
+          <table className="min-w-[400px] max-w-[600px]">
             <thead className="border-b-2 border-b-gray-300">
               <tr className="w-full py-2.5 ">
                 <td>Source</td>

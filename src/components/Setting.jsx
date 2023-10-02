@@ -31,6 +31,12 @@ const Setting = ({
   columnInformation,
   selectedColumns,
   setSelectedColumns,
+  LSL,
+  USL,
+  setLSL,
+  setUSL,
+  k,
+  setK,
 }) => {
   return (
     <div>
@@ -95,6 +101,54 @@ const Setting = ({
               })
             )}
           </div>
+        </div>
+      </div>
+      <div className="md:grid gap-6 mb-6 md:grid-cols-2 my-5 flex flex-col">
+        <div>
+          <label
+            htmlFor="Untere Spez. Grenze"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Untere Spez. Grenze
+          </label>
+          <input
+            type="number"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            onChange={(e) => setLSL(e.target.value)}
+            value={LSL == undefined ? 0 : LSL}
+            aria-label="Untere Spez. Grenze"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="Obere Spez. Grenze"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Obere Spez. Grenze
+          </label>
+          <input
+            type="number"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            onChange={(e) => setUSL(e.target.value)}
+            value={USL == undefined ? 0 : USL}
+            aria-label="Obere Spez. Grenze"
+          />
+        </div>
+        <div className="col-span-2">
+          <label
+            htmlFor="k"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            k
+          </label>
+          <input
+            type="number"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            onChange={(e) => setK(e.target.value)}
+            value={k == undefined ? 0 : k}
+            aria-label="k"
+          />
         </div>
       </div>
     </div>

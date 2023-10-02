@@ -22,6 +22,9 @@ const MeasurementHistoryChart = lazy(() =>
 
 const MSAType2 = () => {
   const [data, setData] = useState([]);
+  const [LSL, setLSL] = useState();
+  const [USL, setUSL] = useState();
+  const [k, setK] = useState();
 
   const [columnInformation, setColumnInformation] = useState({
     measuredValuesColumn: [],
@@ -161,7 +164,14 @@ const MSAType2 = () => {
             columnInformation={columnInformation}
             selectedColumns={selectedColumns}
             setSelectedColumns={setSelectedColumns}
+            LSL={LSL}
+            setLSL={setLSL}
+            USL={USL}
+            setUSL={setUSL}
+            k={k}
+            setK={setK}
           />
+          <hr className="my-10 border" />
         </Suspense>
       </>
       <>
