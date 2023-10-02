@@ -9,9 +9,9 @@ import LOADING from "../../assets/loading.gif";
 
 const Setting = lazy(() => import("../../components/Setting"));
 const DataTable = lazy(() => import("../../components/Handsontable"));
-const ANOVATable = lazy(() => import("../../components/ANOVATable"));
+const ANOVATable = lazy(() => import("../../components/tables/ANOVATable"));
 const VarianceComponentTable = lazy(() =>
-  import("../../components/VarianceComponentTable")
+  import("../../components/tables/VarianceComponentTable")
 );
 const ComponentVariationChart = lazy(() =>
   import("../../components/charts/ComponentVariationChart")
@@ -221,10 +221,7 @@ const MSAType2 = () => {
               }
             >
               <hr className="border my-10" />
-              <VarianceComponentTable
-                data={data}
-                selectedColumns={selectedColumns}
-              />
+              <ANOVATable data={data} selectedColumns={selectedColumns} />
             </Suspense>
             <Suspense
               fallback={
@@ -239,7 +236,10 @@ const MSAType2 = () => {
               }
             >
               <hr className="border my-10" />
-              <ANOVATable data={data} selectedColumns={selectedColumns} />
+              <VarianceComponentTable
+                data={data}
+                selectedColumns={selectedColumns}
+              />
             </Suspense>
           </>
         ) : (

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  ANOVATwoWayWithoutInteraction,
-  calculateGageRR,
-  calculateTwoWayANOVA,
-  convertToArray,
-} from "../utils/utils";
+import { calculateTwoWayANOVA, convertToArray } from "../../utils/utils";
 
 const ANOVATable = ({ data, selectedColumns }) => {
   const operator = convertToArray(
@@ -22,10 +17,10 @@ const ANOVATable = ({ data, selectedColumns }) => {
   return (
     <div>
       <div className="grid grid-cols-1 gap-4">
-          <h3 className="text-xl font-semibold bg-black text-white  text-center">
-            Two Factor ANOVA without Interaction
-          </h3>
-          <div className="w-full overflow-x-scroll">
+        <h3 className="text-xl font-semibold bg-black text-white  text-center">
+          Two Factor ANOVA without Interaction
+        </h3>
+        <div className="w-full overflow-x-scroll">
           <table className="min-w-[700px]">
             <thead className="border-b-2 border-b-gray-300">
               <tr className="w-full py-2.5 ">
@@ -112,7 +107,7 @@ const ANOVATable = ({ data, selectedColumns }) => {
               </tr>
             </tbody>
           </table>
-          </div>
+        </div>
       </div>
     </div>
   );

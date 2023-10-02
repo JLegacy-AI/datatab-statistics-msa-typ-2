@@ -57,7 +57,7 @@ const Setting = ({
           </div>
         </div>
         <div className="flex flex-col items-start justify-center">
-          <p className="py-5">Parts:</p>
+          <p className="py-5">Bauteil:</p>
           <div className="flex-1 flex justify-left items-center flex-wrap">
             {columnInformation["partsColumn"] == [] ? (
               <p>No Columns Yet</p>
@@ -77,7 +77,7 @@ const Setting = ({
           </div>
         </div>
         <div className="flex flex-col items-start justify-center">
-          <p className="py-5">Operator:</p>
+          <p className="py-5">Prüfer:</p>
           <div className="flex-1 flex justify-left items-center flex-wrap">
             {columnInformation["operatorValuesColumn"] == [] ? (
               <p>No Columns Yet</p>

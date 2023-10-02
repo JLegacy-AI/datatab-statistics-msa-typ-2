@@ -88,12 +88,14 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
         name: uniquenessPart[i],
         x: [lineXAxis[i], lineXAxis[i]],
         y: [minXAxis, maxYAxis],
-        mode: "lines",
+        mode: "lines+text",
         line: {
           color: "black",
           width: 1,
           dash: "dot",
         },
+        text: ["", uniquenessPart[i]],
+        textposition: "left",
         showlegend: false,
       });
     }
@@ -132,13 +134,14 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
             automargin: true,
           },
           xaxis: {
-            visible: false,
+            title: "Bauteil",
           },
           yaxis: {
             title: data[0][selectedColumns["measuredValuesColumn"]],
           },
+
           width: chartWidth,
-          height: chartWidth*0.714 < 300 ? 300 : chartWidth*0.714 ,
+          height: chartWidth * 0.714 < 300 ? 300 : chartWidth * 0.714,
         }}
         config={{
           displayModeBar: false,

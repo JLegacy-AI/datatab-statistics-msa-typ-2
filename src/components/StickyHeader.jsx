@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
-import {RiMenu3Fill,RiMenuFill} from "react-icons/ri"
-
+import { RiMenu3Fill, RiMenuFill } from "react-icons/ri";
 
 const buttonStyle = (x) => {
   return x
@@ -21,14 +20,12 @@ const StickyHeader = () => {
         <button
           className=" rounded-md px-2 py-2.5   text-blue-700 hover:bg-gray-300 hover:text-blue-950"
           onClick={() => setVisible(!visible)}
-        > 
-        {
-          visible 
-          ? 
-            <RiMenu3Fill className="w-6 h-6"/>
-          :<RiMenuFill className="w-6 h-6"/>
-        }
-          
+        >
+          {visible ? (
+            <RiMenu3Fill className="w-6 h-6" />
+          ) : (
+            <RiMenuFill className="w-6 h-6" />
+          )}
         </button>
       </div>
       <>
