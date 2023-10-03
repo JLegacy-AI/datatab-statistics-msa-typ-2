@@ -16,6 +16,7 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
   const [cleanedDataForGraph, setCleanedDataForGraph] = useState([]);
   const [linesData, setLinesData] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [annotations, setAnnotations] = useState([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,7 +30,7 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
     };
   }, []);
 
-  const chartWidth = windowWidth > 700 ? 700 : windowWidth - 100;
+  const chartWidth = windowWidth > 800 ? 800 : windowWidth - 100;
 
   useEffect(() => {
     const linesData = [];
@@ -82,39 +83,60 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
     }
 
     const maxYAxis = Math.max(...measured);
-    const minXAxis = Math.min(...measured);
+    const minXAxis = Math.min(...measured) - Math.min(...measured) * 0.05;
     for (let i = 0; i < lineXAxis.length; i++) {
       linesData.push({
         name: uniquenessPart[i],
         x: [lineXAxis[i], lineXAxis[i]],
         y: [minXAxis, maxYAxis],
-        mode: "lines+text",
+        mode: "lines",
         line: {
           color: "black",
           width: 1,
           dash: "dot",
         },
-        text: ["", uniquenessPart[i]],
-        textposition: "left",
         showlegend: false,
       });
     }
 
+    // Create annotations for the bottom and center of each vertical line
+    const annotations = linesData.map((line, index) => {
+      return {
+        x: line.x[0],
+        y: line.y[0],
+        xref: "x",
+        yref: "y",
+        text: `<b class="top-annotation">${uniquenessPart[index]}</b>`,
+        showarrow: true,
+        arrowhead: 0,
+        ax: -60,
+        ay: -10,
+        font: {
+          size: 12,
+          color: "black",
+        },
+      };
+    });
+
     linesData.push({
-      name: "Mean",
+      name: "Mittelwert",
       x: [0, x],
       y: [jstat.mean(measured), jstat.mean(measured)],
-      mode: "lines",
+      mode: "lines+text",
       line: {
         width: 1,
         dash: "dash",
+        color: "blue",
       },
+      text: ["", "Mittelwert"],
+      textposition: "top",
     });
 
     for (let i = 0; i < uniquenessOperator.length; i++) {
       cleanedDataForGraph.push(selfBuiledData[uniquenessOperator[i]]);
     }
 
+    setAnnotations([...annotations]);
     setCleanedDataForGraph(cleanedDataForGraph);
     setLinesData(linesData);
   }, [data, selectedColumns]);
@@ -125,23 +147,26 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
         data={[...cleanedDataForGraph, ...linesData]}
         layout={{
           title: {
-            text: "Messverlaufsdiagramm",
+            text: "<b>Messverlaufsdiagramm</b>",
             font: {
               family: "poppins",
               size: 16,
             },
-            yref: "paper",
             automargin: true,
+            yref: "paper",
           },
           xaxis: {
-            title: "Bauteil",
+            title: "Prüfer",
+            showline: true,
+            showgrid: false,
+            showticklabels: false,
           },
           yaxis: {
             title: data[0][selectedColumns["measuredValuesColumn"]],
           },
-
+          annotations: annotations,
           width: chartWidth,
-          height: chartWidth * 0.714 < 300 ? 300 : chartWidth * 0.714,
+          height: chartWidth * 0.714 < 300 ? 300 : chartWidth * 0.614,
         }}
         config={{
           displayModeBar: false,

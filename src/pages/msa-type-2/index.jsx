@@ -24,7 +24,7 @@ const MSAType2 = () => {
   const [data, setData] = useState([]);
   const [LSL, setLSL] = useState();
   const [USL, setUSL] = useState();
-  const [k, setK] = useState();
+  const [k, setK] = useState(6);
 
   const [columnInformation, setColumnInformation] = useState({
     measuredValuesColumn: [],
@@ -89,9 +89,9 @@ const MSAType2 = () => {
       newSelectedColumn["measuredValuesColumn"] =
         columnInformation["measuredValuesColumn"][0].number;
       newSelectedColumn["operatorValuesColumn"] =
-        columnInformation["operatorValuesColumn"][0].number;
+        columnInformation["operatorValuesColumn"][1].number;
       newSelectedColumn["partsColumn"] =
-        columnInformation["partsColumn"][1].number;
+        columnInformation["partsColumn"][0].number;
       setSelectedColumns(newSelectedColumn);
     }
   }, [columnInformation]);
@@ -138,7 +138,7 @@ const MSAType2 = () => {
                 <p className="w-full min-h-[500px] flex justify-center items-center">
                   <img
                     src={LOADING}
-                    alt="LOADING IMAGE"
+                    alt="LOADING..."
                     height="200"
                     width="200"
                   />
@@ -156,7 +156,7 @@ const MSAType2 = () => {
         <Suspense
           fallback={
             <p className="w-full min-h-[300px] flex justify-center items-center">
-              <img src={LOADING} alt="LOADING IMAGE" height="200" width="200" />
+              <img src={LOADING} alt="LOADING..." height="200" width="200" />
             </p>
           }
         >
@@ -182,7 +182,7 @@ const MSAType2 = () => {
                 <p className="w-100 h-[400px]">
                   <img
                     src={LOADING}
-                    alt="LOADING IMAGE"
+                    alt="LOADING..."
                     height="200"
                     width="200"
                   />
@@ -199,7 +199,7 @@ const MSAType2 = () => {
                 <p className="w-100 h-[400px]">
                   <img
                     src={LOADING}
-                    alt="LOADING IMAGE"
+                    alt="LOADING..."
                     height="200"
                     width="200"
                   />
@@ -223,7 +223,7 @@ const MSAType2 = () => {
                 <p className="w-100 h-[400px]">
                   <img
                     src={LOADING}
-                    alt="LOADING IMAGE"
+                    alt="LOADING..."
                     height="200"
                     width="200"
                   />
@@ -238,7 +238,7 @@ const MSAType2 = () => {
                 <p className="w-100 h-[400px]">
                   <img
                     src={LOADING}
-                    alt="LOADING IMAGE"
+                    alt="LOADING..."
                     height="200"
                     width="200"
                   />
