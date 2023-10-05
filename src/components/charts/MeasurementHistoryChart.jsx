@@ -82,8 +82,8 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
       lineXAxis.push(x - 1);
     }
 
-    const maxYAxis = Math.max(...measured);
-    const minXAxis = Math.min(...measured) - Math.min(...measured) * 0.05;
+    const maxYAxis = Math.max(...measured) * 1.05;
+    const minXAxis = Math.min(...measured);
     for (let i = 0; i < lineXAxis.length; i++) {
       linesData.push({
         name: uniquenessPart[i],
@@ -102,34 +102,49 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
     // Create annotations for the bottom and center of each vertical line
     const annotations = linesData.map((line, index) => {
       return {
-        x: line.x[0],
-        y: line.y[0],
+        x: line.x[1],
+        y: line.y[1],
         xref: "x",
         yref: "y",
         text: `<b class="top-annotation">${uniquenessPart[index]}</b>`,
         showarrow: true,
         arrowhead: 0,
         ax: -60,
-        ay: -10,
+        ay: 10,
         font: {
           size: 12,
           color: "black",
         },
+        textposition: "top",
       };
+    });
+
+    annotations.push({
+      x: x + x * 0.13,
+      y: jstat.mean(measured),
+      xref: "x",
+      yref: "y",
+      text: `<b>Mittelwert</b>`,
+      showarrow: true,
+      arrowhead: 0,
+      ax: -30,
+      ay: 0,
+      font: {
+        size: 12,
+        color: "black",
+      },
     });
 
     linesData.push({
       name: "Mittelwert",
       x: [0, x],
       y: [jstat.mean(measured), jstat.mean(measured)],
-      mode: "lines+text",
+      mode: "lines",
       line: {
         width: 1,
         dash: "dash",
         color: "blue",
       },
-      text: ["", "Mittelwert"],
-      textposition: "top",
     });
 
     for (let i = 0; i < uniquenessOperator.length; i++) {
@@ -156,7 +171,7 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
             yref: "paper",
           },
           xaxis: {
-            title: "Prüfer",
+            title: "<b>Bauteil</b>",
             showline: true,
             showgrid: false,
             showticklabels: false,
@@ -167,6 +182,11 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
           annotations: annotations,
           width: chartWidth,
           height: chartWidth * 0.714 < 300 ? 300 : chartWidth * 0.614,
+          legend: {
+            title: {
+              text: "<b>Prüfer</b>",
+            },
+          },
         }}
         config={{
           displayModeBar: false,
