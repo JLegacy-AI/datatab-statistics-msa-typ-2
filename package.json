@@ -2,7 +2,7 @@
   "name": "datatab-analysis-msa-typ-2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://qm-datalab.de/msatyp2",
+  "homepage": "https://www.qm-datalab.de/msatyp2",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@handsontable/react": "^13.0.0",

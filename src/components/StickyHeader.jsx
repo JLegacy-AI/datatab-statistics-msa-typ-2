@@ -34,7 +34,7 @@ const StickyHeader = () => {
             <div className="px-5 pb-3 flex flex-col md:hidden">
               <a
                 className={buttonStyle(false)}
-                href="https://qm-datalab.de/msatyp1"
+                href="https://www.qm-datalab.de/msatyp1"
                 target="_blank"
               >
                 MSA Typ 1
@@ -44,7 +44,7 @@ const StickyHeader = () => {
               </a>
               <a
                 className={buttonStyle(false)}
-                href="https://qm-datalab.de/prozessfaehigkeitsanalyse"
+                href="https://www.qm-datalab.de/prozessfaehigkeitsanalyse"
                 target="_blank"
               >
                 Prozessfähigkeit
@@ -62,7 +62,7 @@ const StickyHeader = () => {
         <div className="px-5 md:px-20 hidden pb-3 md:flex flex-col md:flex-row ">
           <a
             className={buttonStyle(false)}
-            href="https://qm-datalab.de/msatyp1"
+            href="https://www.qm-datalab.de/msatyp1"
             target="_blank"
           >
             MSA Typ 1
@@ -72,7 +72,7 @@ const StickyHeader = () => {
           </a>
           <a
             className={buttonStyle(false)}
-            href="https://qm-datalab.de/prozessfaehigkeitsanalyse"
+            href="https://www.qm-datalab.de/prozessfaehigkeitsanalyse"
             target="_blank"
           >
             Prozessfähigkeit
