@@ -1,4 +1,5 @@
 import jStat from "jStat";
+import { log } from "mathjs";
 import * as XLSX from "xlsx";
 
 export const initColumns = (data) => {
@@ -476,3 +477,185 @@ const partToOperator = (operator, part, measurement) => {
     ) / measurementsGroups.length
   );
 };
+
+export function customGageRR(part, operator, measured, k = 6, tolerance = 1) {
+  let result = {
+    Repeatability: {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    Reproducibility: {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    Operator: {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    "Part to Part": {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    "Total Variation": {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+    "Total Gage R&R": {
+      VarComp: 0,
+      "% Contribution (of VarComp)": 0,
+      stdDev: 0,
+      "Study Variance (6xSD)": 0,
+      "% Study Variance (%SV)": 0,
+      "% Tolerance (SV/Tol)": 0,
+    },
+  };
+
+  // Calculate the total sum of squares (SST)
+  const grandMean =
+    measured.reduce((sum, value) => sum + value, 0) / measured.length;
+
+  //Calculate Sum of Squares
+  const SST = measured.reduce(
+    (sum, value) => sum + Math.pow(value - grandMean, 2),
+    0
+  );
+  const SS_PART = calculateSumOfSquares(part, measured);
+  const SS_OP = calculateSumOfSquares(operator, measured);
+  const SS_REP = SST - SS_PART - SS_OP;
+
+  // Calculate the number of unique levels for Factor A and Factor B
+  const uniqueLevelsA = [...new Set(part)];
+  const uniqueLevelsB = [...new Set(operator)];
+
+  // Calculate the total number
+  const N = measured.length;
+  const N_OP = uniqueLevelsB.length;
+  const N_PART = uniqueLevelsA.length;
+  const N_REP = 3;
+
+  // Calculate the degrees of freedom
+  const DF_OP = N_OP - 1;
+  const DF_PART = N_PART - 1;
+  const DF_REP = N_PART * N_OP * (N_REP - 1) + DF_OP * DF_PART;
+  const DF_TOTAL = N_PART * N_OP * N_REP - 1;
+
+  //Calculate Mean Square
+  const MS_PART = SS_PART / DF_PART;
+  const MS_REP = SS_REP / DF_REP;
+  const MS_TOTAL = SST / DF_TOTAL;
+  const MS_OP = SS_OP / DF_OP;
+
+  //Calculate variance
+  const VAR_PART = (MS_PART - MS_REP) / (N_OP * N_REP);
+  const VAR_OP = (MS_OP - MS_REP) / (N_PART * N_REP);
+  const VAR_REP = MS_REP;
+  const VAR_REPO = VAR_OP + 0;
+  const VAR_GRR = VAR_REP + VAR_REPO;
+  const VAR_TOTAL = VAR_GRR + VAR_PART;
+
+  //ADDING VARIANCE TO RESULT
+  result["Operator"]["VarComp"] = VAR_OP;
+  result["Part to Part"]["VarComp"] = VAR_PART;
+  result["Repeatability"]["VarComp"] = VAR_REP;
+  result["Reproducibility"]["VarComp"] = VAR_REPO;
+  result["Total Gage R&R"]["VarComp"] = VAR_GRR;
+  result["Total Variation"]["VarComp"] = VAR_TOTAL;
+
+  //PERCENTAGE Variance
+  result["Operator"]["% Contribution (of VarComp)"] =
+    (VAR_OP / VAR_TOTAL) * 100;
+  result["Part to Part"]["% Contribution (of VarComp)"] =
+    (VAR_PART / VAR_TOTAL) * 100;
+  result["Repeatability"]["% Contribution (of VarComp)"] =
+    (VAR_REP / VAR_TOTAL) * 100;
+  result["Reproducibility"]["% Contribution (of VarComp)"] =
+    (VAR_REPO / VAR_TOTAL) * 100;
+  result["Total Gage R&R"]["% Contribution (of VarComp)"] =
+    (VAR_GRR / VAR_TOTAL) * 100;
+  result["Total Variation"]["% Contribution (of VarComp)"] =
+    (VAR_TOTAL / VAR_TOTAL) * 100;
+
+  //ADDING Standard Deviation TO RESULT
+  result["Operator"]["stdDev"] = Math.sqrt(VAR_OP);
+  result["Part to Part"]["stdDev"] = Math.sqrt(VAR_PART);
+  result["Repeatability"]["stdDev"] = Math.sqrt(VAR_REP);
+  result["Reproducibility"]["stdDev"] = Math.sqrt(VAR_REPO);
+  result["Total Gage R&R"]["stdDev"] = Math.sqrt(VAR_GRR);
+  result["Total Variation"]["stdDev"] = Math.sqrt(VAR_TOTAL);
+
+  //ADDING Study Variance TO RESULT
+  result["Operator"]["Study Variance (6xSD)"] =
+    result["Operator"]["stdDev"] * k;
+  result["Part to Part"]["Study Variance (6xSD)"] =
+    result["Part to Part"]["stdDev"] * k;
+  result["Repeatability"]["Study Variance (6xSD)"] =
+    result["Repeatability"]["stdDev"] * k;
+  result["Reproducibility"]["Study Variance (6xSD)"] =
+    result["Reproducibility"]["stdDev"] * k;
+  result["Total Gage R&R"]["Study Variance (6xSD)"] =
+    result["Total Gage R&R"]["stdDev"] * k;
+  result["Total Variation"]["Study Variance (6xSD)"] =
+    result["Total Variation"]["stdDev"] * k;
+
+  //% Study Variance
+  result["Operator"]["% Study Variance (%SV)"] =
+    (result["Operator"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Part to Part"]["% Study Variance (%SV)"] =
+    (result["Part to Part"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Repeatability"]["% Study Variance (%SV)"] =
+    (result["Repeatability"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Reproducibility"]["% Study Variance (%SV)"] =
+    (result["Reproducibility"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Total Gage R&R"]["% Study Variance (%SV)"] =
+    (result["Total Gage R&R"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+  result["Total Variation"]["% Study Variance (%SV)"] =
+    (result["Total Variation"]["Study Variance (6xSD)"] /
+      result["Total Variation"]["Study Variance (6xSD)"]) *
+    100;
+
+  //% Tolerance
+  result["Operator"]["% Tolerance (SV/Tol)"] =
+    (result["Operator"]["Study Variance (6xSD)"] / tolerance) * 100;
+  result["Part to Part"]["% Tolerance (SV/Tol)"] =
+    (result["Part to Part"]["Study Variance (6xSD)"] / tolerance) * 100;
+  result["Repeatability"]["% Tolerance (SV/Tol)"] =
+    (result["Repeatability"]["Study Variance (6xSD)"] / tolerance) * 100;
+  result["Reproducibility"]["% Tolerance (SV/Tol)"] =
+    (result["Reproducibility"]["Study Variance (6xSD)"] / tolerance) * 100;
+  result["Total Gage R&R"]["% Tolerance (SV/Tol)"] =
+    (result["Total Gage R&R"]["Study Variance (6xSD)"] / tolerance) * 100;
+  result["Total Variation"]["% Tolerance (SV/Tol)"] =
+    (result["Total Variation"]["Study Variance (6xSD)"] / tolerance) * 100;
+
+  return result;
+}
