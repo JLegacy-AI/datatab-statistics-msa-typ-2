@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Plot from "react-plotly.js";
-import { convertToArray, varianceComponent } from "../../utils/utils";
+import { convertToArray, customGageRR } from "../../utils/utils";
 
 const ComponentVariationChart = ({ data, selectedColumns }) => {
   const operator = convertToArray(
@@ -28,7 +28,7 @@ const ComponentVariationChart = ({ data, selectedColumns }) => {
     };
   }, []);
 
-  const result = varianceComponent(operator, part, measured, 20);
+  const result = customGageRR(operator, part, measured, 20);
 
   const data2 = [
     {
@@ -81,7 +81,7 @@ const ComponentVariationChart = ({ data, selectedColumns }) => {
         layout={{
           ...layout,
           width: chartWidth, // Set the chart width dynamically
-          height: chartWidth*0.5  < 300 ? 300 : chartWidth*0.5, // Set a fixed chart height or adjust as needed
+          height: chartWidth * 0.5 < 300 ? 300 : chartWidth * 0.5, // Set a fixed chart height or adjust as needed
         }}
         config={{
           displayModeBar: false,
