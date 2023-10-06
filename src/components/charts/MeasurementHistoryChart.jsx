@@ -100,16 +100,20 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
     }
 
     // Create annotations for the bottom and center of each vertical line
+    let previousPoint = 0;
     const annotations = linesData.map((line, index) => {
+      const temp = previousPoint;
+      previousPoint = line.x[1];
+      console.log((temp + line.x[1]) / 2);
       return {
-        x: line.x[1],
+        x: Math.ceil((temp + line.x[1]) / 2),
         y: line.y[1],
         xref: "x",
         yref: "y",
-        text: `<b class="top-annotation">${uniquenessPart[index]}</b>`,
+        text: `<b>${uniquenessPart[index]}</b>`,
         showarrow: true,
         arrowhead: 0,
-        ax: -60,
+        ax: 0,
         ay: 10,
         font: {
           size: 12,
@@ -124,7 +128,7 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
       y: jstat.mean(measured),
       xref: "x",
       yref: "y",
-      text: `<b>Mittelwert</b>`,
+      text: `Mittelwert`,
       showarrow: true,
       arrowhead: 0,
       ax: -30,
@@ -180,8 +184,8 @@ const MeasurementHistoryChart = ({ data, selectedColumns }) => {
             title: data[0][selectedColumns["measuredValuesColumn"]],
           },
           annotations: annotations,
-          width: chartWidth,
-          height: chartWidth * 0.714 < 300 ? 300 : chartWidth * 0.614,
+          width: chartWidth < 300 ? 300 : chartWidth,
+          height: chartWidth * 0.614 < 400 ? 400 : chartWidth * 0.614,
           legend: {
             title: {
               text: "<b>Prüfer</b>",

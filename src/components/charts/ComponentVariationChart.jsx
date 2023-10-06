@@ -80,7 +80,7 @@ const ComponentVariationChart = ({ data, selectedColumns }) => {
         data={data2}
         layout={{
           ...layout,
-          width: chartWidth,
+          width: chartWidth < 300 ? 300 : chartWidth,
           height: chartWidth * 0.5 < 300 ? 300 : chartWidth * 0.5,
         }}
         config={{
