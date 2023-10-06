@@ -137,7 +137,8 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                 </td>
                 <td>
                   {numberFormat(
-                    result["Total Gage R&R"]["% Tolerance (SV/Tol)"]
+                    result["Total Gage R&R"]["% Tolerance (SV/Tol)"],
+                    true
                   )}
                 </td>
               </tr>
@@ -157,7 +158,8 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                 </td>
                 <td>
                   {numberFormat(
-                    result["Repeatability"]["% Tolerance (SV/Tol)"]
+                    result["Repeatability"]["% Tolerance (SV/Tol)"],
+                    true
                   )}
                 </td>
               </tr>
@@ -178,7 +180,8 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                 </td>
                 <td>
                   {numberFormat(
-                    result["Reproducibility"]["% Tolerance (SV/Tol)"]
+                    result["Reproducibility"]["% Tolerance (SV/Tol)"],
+                    true
                   )}
                 </td>
               </tr>
@@ -196,7 +199,10 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                   )}
                 </td>
                 <td>
-                  {numberFormat(result["Operator"]["% Tolerance (SV/Tol)"])}
+                  {numberFormat(
+                    result["Operator"]["% Tolerance (SV/Tol)"],
+                    true
+                  )}
                 </td>
               </tr>
               <tr>
@@ -215,7 +221,10 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                   )}
                 </td>
                 <td>
-                  {numberFormat(result["Part to Part"]["% Tolerance (SV/Tol)"])}
+                  {numberFormat(
+                    result["Part to Part"]["% Tolerance (SV/Tol)"],
+                    true
+                  )}
                 </td>
               </tr>
               <tr>
@@ -235,7 +244,8 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                 </td>
                 <td>
                   {numberFormat(
-                    result["Total Variation"]["% Tolerance (SV/Tol)"]
+                    result["Total Variation"]["% Tolerance (SV/Tol)"],
+                    true
                   )}
                 </td>
               </tr>

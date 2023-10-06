@@ -22,8 +22,8 @@ const MeasurementHistoryChart = lazy(() =>
 
 const MSAType2 = () => {
   const [data, setData] = useState([]);
-  const [LSL, setLSL] = useState();
-  const [USL, setUSL] = useState();
+  const [LSL, setLSL] = useState(1);
+  const [USL, setUSL] = useState(2);
   const [k, setK] = useState(6);
 
   const [columnInformation, setColumnInformation] = useState({
