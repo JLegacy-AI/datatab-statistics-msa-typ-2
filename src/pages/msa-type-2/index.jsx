@@ -107,7 +107,7 @@ const MSAType2 = () => {
   return (
     <div>
       <h1 className="font-bold text-2xl mb-3">Dateninput</h1>
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-col sm:flex-row">
         <button
           className="hover:text-green-600 transition-all duration-300"
           onClick={() => setData(handleClearTable)}
@@ -129,7 +129,7 @@ const MSAType2 = () => {
       <div>
         {data.length == 0 ? (
           <p className="flex justify-center items-center font-bold">
-            Data is Not Present Yet
+            <img src={LOADING} alt="LOADING..." height="200" width="200" />
           </p>
         ) : (
           <>
