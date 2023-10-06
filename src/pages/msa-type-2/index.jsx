@@ -251,6 +251,7 @@ const MSAType2 = () => {
                 selectedColumns={selectedColumns}
                 LSL={LSL}
                 USL={USL}
+                k={k}
               />
             </Suspense>
           </>

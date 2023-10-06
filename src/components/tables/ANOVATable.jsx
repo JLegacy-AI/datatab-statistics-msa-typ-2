@@ -18,13 +18,13 @@ const ANOVATable = ({ data, selectedColumns }) => {
     <div>
       <div className="grid grid-cols-1 gap-4">
         <h3 className="text-xl font-semibold bg-black text-white  text-center">
-          Two Factor ANOVA without Interaction
+          Zweifaktorielle ANOVA ohne Interaktion
         </h3>
         <div className="w-full overflow-x-scroll">
           <table className="min-w-[700px]">
             <thead className="border-b-2 border-b-gray-300">
               <tr className="w-full py-2.5 ">
-                <td>Source</td>
+                <td>Quelle</td>
                 <td>DF</td>
                 <td>SS</td>
                 <td>MS</td>
@@ -34,7 +34,7 @@ const ANOVATable = ({ data, selectedColumns }) => {
             </thead>
             <tbody>
               <tr>
-                <td>Part</td>
+                <td>Bauteil</td>
                 <td>{result["DF_A"]}</td>
                 <td>
                   {typeof result["SS_A"] == "number"
@@ -58,7 +58,7 @@ const ANOVATable = ({ data, selectedColumns }) => {
                 </td>
               </tr>
               <tr>
-                <td>Operator</td>
+                <td>Prüfer</td>
                 <td>{result["DF_B"]}</td>
                 <td>
                   {typeof result["SS_B"] == "number"
@@ -82,7 +82,7 @@ const ANOVATable = ({ data, selectedColumns }) => {
                 </td>
               </tr>
               <tr>
-                <td>Repeatability</td>
+                <td>Wiederholbarkeit</td>
                 <td>{result["DF_error"]}</td>
 
                 <td>
@@ -97,7 +97,7 @@ const ANOVATable = ({ data, selectedColumns }) => {
                 </td>
               </tr>
               <tr>
-                <td>Total</td>
+                <td>Gesamt</td>
                 <td>{result["DF_total"]}</td>
                 <td>
                   {typeof result["SS_Total"] == "number"

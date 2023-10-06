@@ -114,7 +114,7 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
               <tr className="w-full py-2.5 ">
                 <td>Quelle</td>
                 <td>StdAbw</td>
-                <td>Streu. in Unters. {`${k} x SA`}</td>
+                <td>Streu. in Unters. {`(${k} x SA)`}</td>
                 <td>% Streu. in Unters.</td>
                 <td>% Toleranz</td>
               </tr>
