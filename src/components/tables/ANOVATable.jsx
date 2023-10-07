@@ -20,7 +20,7 @@ const ANOVATable = ({ data, selectedColumns }) => {
         <h3 className="text-xl font-semibold bg-black text-white  text-center">
           Zweifaktorielle ANOVA ohne Interaktion
         </h3>
-        <div className="w-full overflow-x-scroll">
+        <div className="w-full overflow-x-scroll mdx:overflow-hidden">
           <table className="min-w-[700px]">
             <thead className="border-b-2 border-b-gray-300">
               <tr className="w-full py-2.5 ">

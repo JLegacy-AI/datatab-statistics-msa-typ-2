@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Plot from "react-plotly.js";
 import { convertToArray, customGageRR } from "../../utils/utils";
 
-const ComponentVariationChart = ({ data, selectedColumns }) => {
+const ComponentVariationChart = ({ data, selectedColumns, k, LSL, USL }) => {
   const operator = convertToArray(
     data,
     selectedColumns["operatorValuesColumn"]
@@ -28,7 +28,7 @@ const ComponentVariationChart = ({ data, selectedColumns }) => {
     };
   }, []);
 
-  const result = customGageRR(operator, part, measured, 20);
+  const result = customGageRR(operator, part, measured, k, USL - LSL);
 
   const data2 = [
     {

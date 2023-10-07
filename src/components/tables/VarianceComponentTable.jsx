@@ -1,9 +1,5 @@
 import React, { useCallback } from "react";
-import {
-  customGageRR,
-  convertToArray,
-  varianceComponent,
-} from "../../utils/utils";
+import { customGageRR, convertToArray } from "../../utils/utils";
 
 const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
   const operator = convertToArray(
@@ -28,7 +24,7 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-1">
+      <div className="grid grid-cols-1 space-y-6">
         <h3 className="text-xl min-w-[400px] max-w-[600px] font-semibold bg-black text-white  text-center">
           Varianzkomponenten
         </h3>
@@ -108,7 +104,7 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
         <h3 className="text-xl font-semibold bg-black text-white  text-center">
           Beurteilung Messprozess
         </h3>
-        <div className="overflow-x-scroll">
+        <div className="mdxl:overflow-hidden overflow-x-scroll">
           <table className="min-w-[700px] ">
             <thead className="border-b-2 border-b-gray-300">
               <tr className="w-full py-2.5 ">

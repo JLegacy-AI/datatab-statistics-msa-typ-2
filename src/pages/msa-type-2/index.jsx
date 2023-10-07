@@ -212,6 +212,9 @@ const MSAType2 = () => {
                   <ComponentVariationChart
                     data={data}
                     selectedColumns={selectedColumns}
+                    LSL={LSL}
+                    USL={USL}
+                    k={k}
                   />
                 </>
               ) : (
