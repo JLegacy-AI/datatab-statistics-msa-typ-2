@@ -28,7 +28,7 @@ const ComponentVariationChart = ({ data, selectedColumns, k, LSL, USL }) => {
     };
   }, []);
 
-  const result = customGageRR(operator, part, measured, k, USL - LSL);
+  const result = customGageRR(part, operator, measured, k, USL - LSL);
 
   const data2 = [
     {
