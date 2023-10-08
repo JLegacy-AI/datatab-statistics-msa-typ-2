@@ -209,6 +209,28 @@ const MSAType2 = () => {
               <hr className="border my-10" /> 
               <ANOVATable data={data} selectedColumns={selectedColumns} />
             </Suspense>
+           
+            <Suspense
+              fallback={
+                <p className="w-100 h-[400px]">
+                  <img
+                    src={LOADING}
+                    alt="LOADING..."
+                    height="200"
+                    width="200"
+                  />
+                </p>
+              }
+            >
+              <hr className="border my-10" />
+              <VarianceComponentTable
+                data={data}
+                selectedColumns={selectedColumns}
+                LSL={LSL}
+                USL={USL}
+                k={k}
+              />
+            </Suspense>
             <Suspense
               fallback={
                 <p className="w-100 h-[400px]">
@@ -236,28 +258,6 @@ const MSAType2 = () => {
                 <></>
               )}
             </Suspense>
-            <Suspense
-              fallback={
-                <p className="w-100 h-[400px]">
-                  <img
-                    src={LOADING}
-                    alt="LOADING..."
-                    height="200"
-                    width="200"
-                  />
-                </p>
-              }
-            >
-              <hr className="border my-10" />
-              <VarianceComponentTable
-                data={data}
-                selectedColumns={selectedColumns}
-                LSL={LSL}
-                USL={USL}
-                k={k}
-              />
-            </Suspense>
-            
           </>
         ) : (
           <></>
