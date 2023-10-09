@@ -68,7 +68,7 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                   )}
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>Prüfer</td>
                 <td>{numberFormat(result["Operator"]["VarComp"])}</td>
                 <td>
@@ -77,7 +77,7 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                     true
                   )}
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <td>Zwischen den Teilen</td>
                 <td>{numberFormat(result["Part to Part"]["VarComp"])}</td>
@@ -181,7 +181,7 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                   )}
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>Prüfer</td>
 
                 <td>{numberFormat(result["Operator"]["stdDev"])}</td>
@@ -200,7 +200,7 @@ const VarianceComponentTable = ({ data, selectedColumns, LSL, USL, k }) => {
                     true
                   )}
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <td>Zwischen den Teilen</td>
 

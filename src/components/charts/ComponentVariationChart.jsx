@@ -32,34 +32,34 @@ const ComponentVariationChart = ({ data, selectedColumns, k, LSL, USL }) => {
 
   const data2 = [
     {
-      x: ["R&R ( Gesamt )", "Wiederholbarkeit", "Reproduzierbarkeit", "Prüfer"],
+      x: ["R&R ( Gesamt )", "Wiederholbarkeit", "Reproduzierbarkeit", "Zwischen den Teilen"],
       y: [
         result["Total Gage R&R"]["% Contribution (of VarComp)"],
         result["Repeatability"]["% Contribution (of VarComp)"],
         result["Reproducibility"]["% Contribution (of VarComp)"],
-        result["Part to Part"]["% Contribution (of VarComp)"],
+        result["Between the parts"]["% Contribution (of VarComp)"],
       ],
       name: "% Beitrag",
       type: "bar",
     },
     {
-      x: ["R&R ( Gesamt )", "Wiederholbarkeit", "Reproduzierbarkeit", "Prüfer"],
+      x: ["R&R ( Gesamt )", "Wiederholbarkeit", "Reproduzierbarkeit", "Zwischen den Teilen"],
       y: [
         result["Total Gage R&R"]["% Study Variance (%SV)"],
         result["Repeatability"]["% Study Variance (%SV)"],
         result["Reproducibility"]["% Study Variance (%SV)"],
-        result["Part to Part"]["% Study Variance (%SV)"],
+        result["Between the parts"]["% Study Variance (%SV)"],
       ],
       name: "% Streu. in Unters.",
       type: "bar",
     },
     {
-      x: ["R&R ( Gesamt )", "Wiederholbarkeit", "Reproduzierbarkeit", "Prüfer"],
+      x: ["R&R ( Gesamt )", "Wiederholbarkeit", "Reproduzierbarkeit", "Zwischen den Teilen"],
       y: [
         result["Total Gage R&R"]["% Tolerance (SV/Tol)"],
         result["Repeatability"]["% Tolerance (SV/Tol)"],
         result["Reproducibility"]["% Tolerance (SV/Tol)"],
-        result["Part to Part"]["% Tolerance (SV/Tol)"],
+        result["Between the parts"]["% Tolerance (SV/Tol)"],
       ],
       name: "% Toleranz",
       type: "bar",
